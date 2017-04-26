@@ -1,5 +1,6 @@
 package
 {
+	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.PNGEncoder;
 	
 	import flash.display.BitmapData;
@@ -11,8 +12,9 @@ package
 	import flash.events.MouseEvent;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
+	import flash.geom.Matrix;
 	
-	[SWF(width = "1280", height = "800", frameRate="60", backgroundColor = "#FFFFFF")]
+	[SWF(width = "800", height = "800", frameRate="60", backgroundColor = "#FFFFFF", alpha = "0")]
 	
 	public class CharacterGenerator extends Sprite
 	{
@@ -212,8 +214,12 @@ package
 					break;
 				
 				case "saveBtn":
-					var bitmapData:BitmapData = new BitmapData(characterContrainer.width, characterContrainer.height);
-					bitmapData.draw(characterContrainer);
+					var bitmapData:BitmapData = new BitmapData(stage.stageWidth, stage.stageHeight);
+					var shiftOrigin:Matrix = new Matrix();
+					shiftOrigin.translate((stage.stageWidth - characterContrainer.width)/2, (stage.stageHeight - characterContrainer.height)/2 + 80);
+					bitmapData.draw(characterContrainer, shiftOrigin);
+					//var jpgEncoder:JPGEncoder = new JPGEncoder(85);
+					//var byteArray:ByteArray = jpgEncoder.encode(bitmapData);
 					var byteArray:ByteArray = PNGEncoder.encode(bitmapData);
 					var fileReference:FileReference = new FileReference();
 					fileReference.save(byteArray, "image.png");
@@ -230,7 +236,7 @@ package
 		
 		private function OnResize(event:Event = null):void{
 			characterContrainer.x = (stage.stageWidth - characterContrainer.width)/2;
-			characterContrainer.y = (stage.stageHeight - characterContrainer.height)/2;
+			characterContrainer.y = (stage.stageHeight - characterContrainer.height)/2 + 80;
 			
 			randomBtn.x = stage.stageWidth - (randomBtn.width + 150);
 			randomBtn.y = 20;
