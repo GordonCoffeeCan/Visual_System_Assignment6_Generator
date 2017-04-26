@@ -1,18 +1,25 @@
 package
 {
+	import com.adobe.images.PNGEncoder;
+	
+	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.FileReference;
+	import flash.utils.ByteArray;
 	
-	[SWF(width = "1280", height = "960", frameRate="60", backgroundColor = "#FFFFFF")]
+	[SWF(width = "1280", height = "800", frameRate="60", backgroundColor = "#FFFFFF")]
 	
 	public class CharacterGenerator extends Sprite
 	{
+		private var characterContrainer:MovieClip;
 		private var character:Character_mc;
 		private var randomBtn:RandomBtn_mc;
+		private var saveBtn:SaveBtn_mc;
 		
 		private var head:MovieClip;
 		private var torso:MovieClip;
@@ -39,6 +46,7 @@ package
 		private var bodyParts:Array;
 		private var bodyPartsFrame:Array;
 		
+		
 		public function CharacterGenerator()
 		{
 			if(stage){
@@ -59,8 +67,10 @@ package
 		}
 		
 		private function SetElement():void{
+			characterContrainer = new MovieClip();
 			character = new Character_mc();
 			randomBtn = new RandomBtn_mc();
+			saveBtn = new SaveBtn_mc();
 			
 			head = character.Head_mc;
 			torso = character.Torso_mc;
@@ -82,6 +92,7 @@ package
 			SetButton(hat);
 			
 			SetButton(randomBtn);
+			SetButton(saveBtn);
 			
 			leftEye.stop();
 			rightEye.stop();
@@ -90,8 +101,10 @@ package
 			bodyParts = new Array(head, torso, leftEye, rightEye, mouth, leftArm, rightArm, leftLeg, rightLeg, hat);
 			bodyPartsFrame = new Array(headFrame, torsoFrame, leftEyeFrame, rightEyeFrame, mouthFrame, leftArmFrame, rightArmFrame, leftLegFrame, rightLegFrame, hatFrame);
 			
-			this.addChild(character);
+			this.addChild(characterContrainer);
+			characterContrainer.addChild(character);
 			this.addChild(randomBtn);
+			this.addChild(saveBtn);
 			OnResize();
 		}
 		
@@ -100,10 +113,14 @@ package
 			_mc.buttonMode = true;
 			_mc.addEventListener(MouseEvent.CLICK, OnClick);
 			
-			if(_mc == randomBtn){
+			if(_mc == randomBtn || _mc == saveBtn){
+				if(_mc == randomBtn){
+					_mc.name = "randomBtn";
+				}else if(_mc == saveBtn){
+					_mc.name = "saveBtn";
+				}
 				_mc.addEventListener(MouseEvent.MOUSE_DOWN, OnDown);
 				_mc.addEventListener(MouseEvent.MOUSE_UP, OnUp);
-				_mc.name = "randomBtn";
 			}
 		}
 		
@@ -189,6 +206,17 @@ package
 					for(var j:int = 0; j < bodyParts.length; j++){
 						bodyParts[j].gotoAndStop(bodyPartsFrame[j]);
 					}
+					
+					characterContrainer.addChild(character);
+					
+					break;
+				
+				case "saveBtn":
+					var bitmapData:BitmapData = new BitmapData(characterContrainer.width, characterContrainer.height);
+					bitmapData.draw(characterContrainer);
+					var byteArray:ByteArray = PNGEncoder.encode(bitmapData);
+					var fileReference:FileReference = new FileReference();
+					fileReference.save(byteArray, "image.png");
 					break;
 			}
 		}
@@ -201,11 +229,14 @@ package
 		}
 		
 		private function OnResize(event:Event = null):void{
-			character.x = (stage.stageWidth - character.width)/2;
-			character.y = (stage.stageHeight - character.height)/2;
+			characterContrainer.x = (stage.stageWidth - characterContrainer.width)/2;
+			characterContrainer.y = (stage.stageHeight - characterContrainer.height)/2;
 			
-			randomBtn.x = stage.stageWidth - (randomBtn.width + 20);
+			randomBtn.x = stage.stageWidth - (randomBtn.width + 150);
 			randomBtn.y = 20;
+			
+			saveBtn.x = stage.stageWidth - (saveBtn.width + 20);
+			saveBtn.y = 20;
 		}
 	}
 }
