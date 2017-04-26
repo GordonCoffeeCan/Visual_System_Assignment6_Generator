@@ -69,12 +69,15 @@ package
 			mouth = character.Head_mc.Mouthes_mc;
 			leftArm = character.LeftArm_mc;
 			rightArm = character.RightArm_mc;
+			leftLeg = character.LeftLeg_mc;
+			rightLeg = character.RightLeg_mc;
 			
 			SetButton(head);
 			SetButton(torso);
-			
 			SetButton(leftArm);
 			SetButton(rightArm);
+			SetButton(leftLeg);
+			SetButton(rightLeg);
 			
 			SetButton(randomBtn);
 			
@@ -82,8 +85,8 @@ package
 			rightEye.stop();
 			mouth.stop();
 			
-			bodyParts = new Array(head, torso, leftEye, rightEye, mouth, leftArm, rightArm);
-			bodyPartsFrame = new Array(headFrame, torsoFrame, leftEyeFrame, rightEyeFrame, mouthFrame, leftArmFrame, rightArmFrame);
+			bodyParts = new Array(head, torso, leftEye, rightEye, mouth, leftArm, rightArm, leftLeg, rightLeg);
+			bodyPartsFrame = new Array(headFrame, torsoFrame, leftEyeFrame, rightEyeFrame, mouthFrame, leftArmFrame, rightArmFrame, leftLegFrame, rightLegFrame);
 			
 			this.addChild(character);
 			this.addChild(randomBtn);
@@ -152,6 +155,20 @@ package
 						rightArmFrame = 1;
 					}
 					event.target.gotoAndStop(rightArmFrame);
+					break;
+				case "LeftLeg_mc":
+					leftLegFrame++;
+					if(leftLegFrame > event.target.totalFrames){
+						leftLegFrame = 1;
+					}
+					event.target.gotoAndStop(leftLegFrame);
+					break;
+				case "RightLeg_mc":
+					rightLegFrame++;
+					if(rightLegFrame > event.target.totalFrames){
+						rightLegFrame = 1;
+					}
+					event.target.gotoAndStop(rightLegFrame);
 					break;
 				
 				case "randomBtn":
