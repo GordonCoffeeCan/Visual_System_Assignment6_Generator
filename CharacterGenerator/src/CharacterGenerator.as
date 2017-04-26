@@ -7,7 +7,7 @@ package
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	[SWF(width = "960", height = "640", frameRate="60", backgroundColor = "#FFFFFF")]
+	[SWF(width = "1280", height = "960", frameRate="60", backgroundColor = "#FFFFFF")]
 	
 	public class CharacterGenerator extends Sprite
 	{
@@ -71,6 +71,7 @@ package
 			rightArm = character.RightArm_mc;
 			leftLeg = character.LeftLeg_mc;
 			rightLeg = character.RightLeg_mc;
+			hat = character.Hat_mc;
 			
 			SetButton(head);
 			SetButton(torso);
@@ -78,6 +79,7 @@ package
 			SetButton(rightArm);
 			SetButton(leftLeg);
 			SetButton(rightLeg);
+			SetButton(hat);
 			
 			SetButton(randomBtn);
 			
@@ -85,8 +87,8 @@ package
 			rightEye.stop();
 			mouth.stop();
 			
-			bodyParts = new Array(head, torso, leftEye, rightEye, mouth, leftArm, rightArm, leftLeg, rightLeg);
-			bodyPartsFrame = new Array(headFrame, torsoFrame, leftEyeFrame, rightEyeFrame, mouthFrame, leftArmFrame, rightArmFrame, leftLegFrame, rightLegFrame);
+			bodyParts = new Array(head, torso, leftEye, rightEye, mouth, leftArm, rightArm, leftLeg, rightLeg, hat);
+			bodyPartsFrame = new Array(headFrame, torsoFrame, leftEyeFrame, rightEyeFrame, mouthFrame, leftArmFrame, rightArmFrame, leftLegFrame, rightLegFrame, hatFrame);
 			
 			this.addChild(character);
 			this.addChild(randomBtn);
@@ -169,6 +171,13 @@ package
 						rightLegFrame = 1;
 					}
 					event.target.gotoAndStop(rightLegFrame);
+					break;
+				case "Hat_mc":
+					hatFrame++;
+					if(hatFrame > event.target.totalFrames){
+						hatFrame = 1;
+					}
+					event.target.gotoAndStop(hatFrame);
 					break;
 				
 				case "randomBtn":
